@@ -1,0 +1,60 @@
+####list of commands used####
+
+#pulling the image
+
+docker pull ubuntu
+docker images
+
+#getting the image id
+
+docker images | awk 'FNR == 2 {print $3}'
+
+#saving the image id in a variable
+
+ubuntuimg=$(docker images | awk 'FNR == 2 {print $3}')
+
+#
+
+docker ps
+
+#getting the os release
+
+docker run $ubuntuimg cat /etc/os-release
+
+docker run $ubuntuimg
+
+#getting the container id for cat /etc/os-release
+
+docker ps -a
+docker ps -a | awk 'FNR == 3 {print $1}'
+
+#saving container id in a variable
+
+containerid1=$(docker ps -a | awk 'FNR == 3 {print $1}')
+
+#getting logs for this container
+
+docker logs $containerid1
+
+#updating the apt database
+
+docker run $ubuntuimg apt update
+
+#installing wget
+
+docker run $ubuntuimg apt install -y wget
+docker run $ubuntuimg which wget
+
+#docker commit
+docker commit $containerid1 $ubuntuimg
+
+docker run $ubuntuimg cat /proc/1/cgroup
+
+#remove all the docker containers (WARNING)
+docker rm $(docker ps -a | awk '{print $1}'| awk 'FNR !=1 {print $1}')
+
+#deleting all the images and stuffs (WARNING THIS WILL DELETE ALL THE RUNNING AS WELL AS STOPPED CONTAINERS ALONG WITH THE IMAGES)
+docker system prune -a
+
+
+
